@@ -1,223 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Docker and Azure Command Documentation</title>
+</head>
+<body>
+
 <h1>Docker and Azure Command Documentation</h1>
 
 <h2>Build Docker Image</h2>
 
 <h4>Build a Docker image from a Dockerfile located in the current directory. Tag the image for later use.</h4>
 
-```
-docker build --tag <image_name>:<tag> .
-```
+<pre><code>docker build --tag &lt;image_name&gt;:&lt;tag&gt; .
+</code></pre>
 
 <h4>Example:</h4>
 
-```
-docker build --tag my-fastapi-app:test12 .
-```
+<pre><code>docker build --tag my-fastapi-app:test12 .
+</code></pre>
 
 <h3>Run Docker Container</h3>
 
-<h4>Run a Docker container in detached mode. Map port 80 on the host to port 80 in the container.
+<h4>Run a Docker container in detached mode. Map port 80 on the host to port 80 in the container.</h4>
 
-</h4>
+<pre><code>docker run -d --name &lt;container_name&gt; -p 80:80 &lt;image_name&gt;:&lt;tag&gt;
+</code></pre>
 
-```
-docker run -d --name <container_name> -p 80:80 <image_name>:<tag>
-```
+<h4>Example:</h4>
 
-<h4>Example</h4>
-
-```
-docker run -d --name my-fastapi-container -p 80:80 my-fastapi-app:test12
-```
+<pre><code>docker run -d --name my-fastapi-container -p 80:80 my-fastapi-app:test12
+</code></pre>
 
 <h2>Azure CLI Commands</h2>
 
 <h3>Login to Azure</h3>
 
-<h4>Authenticate and log in to your Azure account.
+<h4>Authenticate and log in to your Azure account.</h4>
 
-</h4>
-
-```
-az login
-```
+<pre><code>az login
+</code></pre>
 
 <h3>Create a Resource Group</h3>
 
-<h4>Create a Resource Group</h4>
+<h4>Create a new resource group in a specified location.</h4>
 
-```
-az group create --location <location> --name <resource_group_name>
-```
+<pre><code>az group create --location &lt;location&gt; --name &lt;resource_group_name&gt;
+</code></pre>
 
-<h4>Example</h4>
+<h4>Example:</h4>
 
-```
-az group create --location eastus --name my-resource-group
-```
+<pre><code>az group create --location eastus --name my-resource-group
+</code></pre>
 
 <h3>Delete a Resource Group</h3>
 
-<h4>Delete a Resource Group</h4>
+<h4>Delete an existing resource group.</h4>
 
-```
-az group delete --name <resource_group_name>
-```
+<pre><code>az group delete --name &lt;resource_group_name&gt;
+</code></pre>
 
-<h4>Example</h4>
+<h4>Example:</h4>
 
-```
-az group delete --name my-resource-group
-```
+<pre><code>az group delete --name my-resource-group
+</code></pre>
 
 <h3>Create a Container Registry</h3>
 
-<h4>Create a new container registry within a specified resource group.
+<h4>Create a new container registry within a specified resource group.</h4>
 
-</h4>
+<pre><code>az acr create --resource-group &lt;resource_group_name&gt; --name &lt;registry_name&gt; --sku &lt;sku&gt;
+</code></pre>
 
-```
-az acr create --resource-group <resource_group_name> --name <registry_name> --sku <sku>
-```
+<h4>Example:</h4>
 
-<h4>Example</h4>
-
-```
-az acr create --resource-group my-resource-group --name mycontainerregistry --sku Basic
-```
+<pre><code>az acr create --resource-group my-resource-group --name mycontainerregistry --sku Basic
+</code></pre>
 
 <h3>Enable Admin Access for Container Registry</h3>
 
-```
-az acr update -n <registry_name> --admin-enabled true
-```
+<pre><code>az acr update -n &lt;registry_name&gt; --admin-enabled true
+</code></pre>
 
-<h4>Example</h4>
+<h4>Example:</h4>
 
-```
-az acr update -n mycontainerregistry --admin-enabled true
-```
+<pre><code>az acr update -n mycontainerregistry --admin-enabled true
+</code></pre>
 
 <h3>Show Container Registry Credentials</h3>
 
-```
-az acr credential show --name <registry_name>
-```
+<pre><code>az acr credential show --name &lt;registry_name&gt;
+</code></pre>
 
-<h4>Example</h4>
+<h4>Example:</h4>
 
-```
-az acr credential show --name mycontainerregistry
-```
-
+<pre><code>az acr credential show --name mycontainerregistry
+</code></pre>
 
 <h3>Log in to Container Registry</h3>
 
-```
-docker login <registry_url>
-```
+<pre><code>docker login &lt;registry_url&gt;
+</code></pre>
 
-<h4>Example</h4>
+<h4>Example:</h4>
 
-```
-docker login mycontainerregistry.azurecr.io
-```
+<pre><code>docker login mycontainerregistry.azurecr.io
+</code></pre>
 
 <h3>Build and Push Docker Image to Container Registry</h3>
 
-```
-az acr build --platform <platform> -t <registry_url>/<image_name>:<tag> -r <registry_name> .
-```
+<pre><code>az acr build --platform &lt;platform&gt; -t &lt;registry_url&gt;/&lt;image_name&gt;:&lt;tag&gt; -r &lt;registry_name&gt; .
+</code></pre>
 
-<h4>Example</h4>
+<h4>Example:</h4>
 
-```
-az acr build --platform linux/amd64 -t mycontainerregistry.azurecr.io/my-fastapi-app:latest -r mycontainerregistry .
-```
+<pre><code>az acr build --platform linux/amd64 -t mycontainerregistry.azurecr.io/my-fastapi-app:latest -r mycontainerregistry .
+</code></pre>
 
 <h3>Create a Container App Environment</h3>
 
-```
-az containerapp env create --name <environment_name> --resource-group <resource_group_name> --location <location>
-```
+<pre><code>az containerapp env create --name &lt;environment_name&gt; --resource-group &lt;resource_group_name&gt; --location &lt;location&gt;
+</code></pre>
 
-<h4>Example</h4>
+<h4>Example:</h4>
 
-```
-az containerapp env create --name my-fastapi-env --resource-group my-resource-group --location eastus
-```
+<pre><code>az containerapp env create --name my-fastapi-env --resource-group my-resource-group --location eastus
+</code></pre>
 
 <h3>Create a Container App</h3>
 
-```
-az containerapp create --name <app_name> \
-    --resource-group <resource_group_name> \
-    --image <registry_url>/<image_name>:<tag> \
-    --environment <environment_name> \
-    --registry-server <registry_url> \
-    --registry-username <registry_username> \
-    --registry-password <registry_password> \
+<pre><code>az containerapp create --name &lt;app_name&gt; \
+    --resource-group &lt;resource_group_name&gt; \
+    --image &lt;registry_url&gt;/&lt;image_name&gt;:&lt;tag&gt; \
+    --environment &lt;environment_name&gt; \
+    --registry-server &lt;registry_url&gt; \
+    --registry-username &lt;registry_username&gt; \
+    --registry-password &lt;registry_password&gt; \
     --ingress external \
     --target-port 80
-```
+</code></pre>
 
-<h4>Example</h4>
+<h4>Example:</h4>
 
-```
-az containerapp create --name my-fastapi-app \
+<pre><code>az containerapp create --name my-fastapi-app \
     --resource-group my-resource-group \
     --image mycontainerregistry.azurecr.io/my-fastapi-app:latest \
     --environment my-fastapi-env \
     --registry-server mycontainerregistry.azurecr.io \
     --registry-username mycontainerregistry \
-    --registry-password <password_here> \
+    --registry-password &lt;password_here&gt; \
     --ingress external \
     --target-port 80
-```
+</code></pre>
 
 <h3>Update and Redeploy</h3>
 
-```
-docker build --tag <image_name>:<tag> .
-```
+<h4>Update Docker Image</h4>
 
-<h4>Example</h4>
+<pre><code>docker build --tag &lt;image_name&gt;:&lt;tag&gt; .
+</code></pre>
 
-```
-docker build --tag my-fastapi-app:test12 .
-```
+<h4>Example:</h4>
+
+<pre><code>docker build --tag my-fastapi-app:test12 .
+</code></pre>
 
 <h3>Push Updated Image to Container Registry</h3>
 
-```
-az acr build --platform <platform> -t <registry_url>/<image_name>:<tag> -r <registry_name> .
-```
+<pre><code>az acr build --platform &lt;platform&gt; -t &lt;registry_url&gt;/&lt;image_name&gt;:&lt;tag&gt; -r &lt;registry_name&gt; .
+</code></pre>
 
-<h4>Example</h4>
+<h4>Example:</h4>
 
-```
-az acr build --platform linux/amd64 -t mycontainerregistry.azurecr.io/my-fastapi-app:latest -r mycontainerregistry .
-```
+<pre><code>az acr build --platform linux/amd64 -t mycontainerregistry.azurecr.io/my-fastapi-app:latest -r mycontainerregistry .
+</code></pre>
 
 <h3>Redeploy Updated Image</h3>
 
-```
-az containerapp revision copy --name <app_name> --resource-group <resource_group_name> --image <registry_url>/<image_name>:<tag>
-```
+<pre><code>az containerapp revision copy --name &lt;app_name&gt; --resource-group &lt;resource_group_name&gt; --image &lt;registry_url&gt;/&lt;image_name&gt;:&lt;tag&gt;
+</code></pre>
 
-<h4>Example</h4>
+<h4>Example:</h4>
 
-```
-az containerapp revision copy --name my-fastapi-app --resource-group my-resource-group --image mycontainerregistry.azurecr.io/my-fastapi-app:latest
-```
+<pre><code>az containerapp revision copy --name my-fastapi-app --resource-group my-resource-group --image mycontainerregistry.azurecr.io/my-fastapi-app:latest
+</code></pre>
 
-
-
-
-
-
-
-
-
-
-
+</body>
+</html>
