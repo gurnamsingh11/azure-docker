@@ -76,12 +76,14 @@ az group delete --name my-resource-group
 
 </h4>
 
-```az acr create --resource-group <resource_group_name> --name <registry_name> --sku <sku>
+```
+az acr create --resource-group <resource_group_name> --name <registry_name> --sku <sku>
 ```
 
 <h4>Example</h4>
 
-```az acr create --resource-group my-resource-group --name mycontainerregistry --sku Basic
+```
+az acr create --resource-group my-resource-group --name mycontainerregistry --sku Basic
 ```
 
 <h3>Enable Admin Access for Container Registry</h3>
