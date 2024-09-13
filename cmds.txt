@@ -1,0 +1,54 @@
+docker build --tag bf-fastapi-demo:test12 .
+
+docker run -d --name test12-bf-fastapi-container -p 80:80 bf-fastapi-demo:test12
+
+az login
+
+Create a resource group
+
+az group create --location eastus --name fastapi-try-rg
+
+# if you need to delete
+az group delete --name fastapi-try-rg
+
+Create a container registry wannatrycontainerregistry for the resource group "fastapi-try-rg"
+
+az acr create --resource-group fastapi-try-rg --name wannatrycontainerregistry --sku Basic
+
+az acr update -n wannatrycontainerregistry --admin-enabled true
+
+az acr credential show --name wannatrycontainerregistry
+
+docker login wannatrycontainerregistry.azurecr.io
+
+Username:
+Password:
+
+az acr build --platform linux/amd64 -t wannatrycontainerregistry.azurecr.io/fastapi-try:latest -r wannatrycontainerregistry . 
+
+az containerapp env create --name fastapi-try-env --resource-group fastapi-try-rg --location eastus
+
+az containerapp create --name try-fastapi-app \
+    --resource-group fastapi-try-rg \
+    --image wannatrycontainerregistry.azurecr.io/fastapi-try:latest \
+    --environment fastapi-try-env \
+    --registry-server wannatrycontainerregistry.azurecr.io \
+    --registry-username wannatrycontainerregistry \
+    --registry-password PASSWORD_HERE \
+    --ingress external \
+    --target-port 80
+
+To apply updates to your code or files, you'll need to follow these steps:
+
+1. Update Your Docker Image
+
+docker build --tag bf-fastapi-demo:test12 .
+
+2. Push the Updated Image to the Container Registry
+
+az acr build --platform linux/amd64 -t wannatrycontainerregistry.azurecr.io/fastapi-try:latest -r wannatrycontainerregistry .
+
+3. Deploy the Updated Image
+
+az containerapp revision copy --name try-fastapi-app --resource-group fastapi-try-rg --image wannatrycontainerregistry.azurecr.io/fastapi-try:latest
+
