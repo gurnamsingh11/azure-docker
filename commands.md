@@ -111,8 +111,105 @@ az acr credential show --name mycontainerregistry
 ```
 
 
+<h3>Log in to Container Registry</h3>
 
+```
+docker login <registry_url>
+```
 
+<h4>Example</h4>
+
+```
+docker login mycontainerregistry.azurecr.io
+```
+
+<h3>Build and Push Docker Image to Container Registry</h3>
+
+```
+az acr build --platform <platform> -t <registry_url>/<image_name>:<tag> -r <registry_name> .
+```
+
+<h4>Example</h4>
+
+```
+az acr build --platform linux/amd64 -t mycontainerregistry.azurecr.io/my-fastapi-app:latest -r mycontainerregistry .
+```
+
+<h3>Create a Container App Environment</h3>
+
+```
+az containerapp env create --name <environment_name> --resource-group <resource_group_name> --location <location>
+```
+
+<h4>Example</h4>
+
+```
+az containerapp env create --name my-fastapi-env --resource-group my-resource-group --location eastus
+```
+
+<h3>Create a Container App</h3>
+
+```
+az containerapp create --name <app_name> \
+    --resource-group <resource_group_name> \
+    --image <registry_url>/<image_name>:<tag> \
+    --environment <environment_name> \
+    --registry-server <registry_url> \
+    --registry-username <registry_username> \
+    --registry-password <registry_password> \
+    --ingress external \
+    --target-port 80
+```
+
+<h4>Example</h4>
+
+```
+az containerapp create --name my-fastapi-app \
+    --resource-group my-resource-group \
+    --image mycontainerregistry.azurecr.io/my-fastapi-app:latest \
+    --environment my-fastapi-env \
+    --registry-server mycontainerregistry.azurecr.io \
+    --registry-username mycontainerregistry \
+    --registry-password <password_here> \
+    --ingress external \
+    --target-port 80
+```
+
+<h3>Update and Redeploy</h3>
+
+```
+docker build --tag <image_name>:<tag> .
+```
+
+<h4>Example</h4>
+
+```
+docker build --tag my-fastapi-app:test12 .
+```
+
+<h3>Push Updated Image to Container Registry</h3>
+
+```
+az acr build --platform <platform> -t <registry_url>/<image_name>:<tag> -r <registry_name> .
+```
+
+<h4>Example</h4>
+
+```
+az acr build --platform linux/amd64 -t mycontainerregistry.azurecr.io/my-fastapi-app:latest -r mycontainerregistry .
+```
+
+<h3>Redeploy Updated Image</h3>
+
+```
+az containerapp revision copy --name <app_name> --resource-group <resource_group_name> --image <registry_url>/<image_name>:<tag>
+```
+
+<h4>Example</h4>
+
+```
+az containerapp revision copy --name my-fastapi-app --resource-group my-resource-group --image mycontainerregistry.azurecr.io/my-fastapi-app:latest
+```
 
 
 
